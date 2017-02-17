@@ -6,10 +6,10 @@
 namespace maks757\eventsdata\controllers;
 
 use common\models\User;
-use maks757\eventsdata\ArticleModule;
+use maks757\eventsdata\EventModule;
 use maks757\eventsdata\components\UploadImage;
-use maks757\eventsdata\entities\Yii2DataArticle;
-use maks757\eventsdata\entities\Yii2DataArticleTranslation;
+use maks757\eventsdata\entities\Yii2DataEvent;
+use maks757\eventsdata\entities\Yii2DataEventTranslation;
 use Yii;
 use yii\helpers\FileHelper;
 use yii\helpers\Url;
@@ -20,14 +20,14 @@ class PostController extends Controller
 {
     public function actionIndex()
     {
-        /** @var $module ArticleModule */
+        /** @var $module EventModule */
         $module = $this->module;
         $languages = \Yii::createObject($module->language_class);
         $language = \Yii::createObject($module->language_class);
         $languages = $languages::findAll($module->language_where);
         $language = $language::findOne($module->language_default);
         return $this->render('index', [
-            'articles' => Yii2DataArticle::find()->orderBy(['date' => SORT_DESC])->all(),
+            'events' => Yii2DataEvent::find()->orderBy(['date' => SORT_DESC])->all(),
             'languages' => $languages,
             'language' => $language,
             'language_field_name' => $module->language_field,
@@ -37,21 +37,21 @@ class PostController extends Controller
 
     public function actionDelete($id)
     {
-        Yii2DataArticle::findOne($id)->delete();
+        Yii2DataEvent::findOne($id)->delete();
         return $this->redirect(\Yii::$app->request->referrer);
     }
 
     public function actionCreate($id = null, $languageId = null, $type = null, $block = null, $block_id = null)
     {
         //Change field position
-        Yii2DataArticle::fieldsPosition($block, $type, $block_id);
+        Yii2DataEvent::fieldsPosition($block, $type, $block_id);
         //Create
         $request = \Yii::$app->request;
-        $model = new Yii2DataArticle();
-        $model_translation = new Yii2DataArticleTranslation();
+        $model = new Yii2DataEvent();
+        $model_translation = new Yii2DataEventTranslation();
         $image_model = new UploadImage();
         //Languages
-        /** @var $module ArticleModule */
+        /** @var $module EventModule */
         $module = $this->module;
         $languages = \Yii::createObject($module->language_class);
         $languages = $languages::findAll($module->language_where);
@@ -62,9 +62,9 @@ class PostController extends Controller
         if(empty($languageId))
             $languageId = (integer)$module->language_default;
 
-        if($model_data = Yii2DataArticle::findOne($id)){
+        if($model_data = Yii2DataEvent::findOne($id)){
             $model = $model_data;
-            if($model_translation_data = Yii2DataArticleTranslation::findOne(['article_id' => $model->id, 'language_id' => $languageId])){
+            if($model_translation_data = Yii2DataEventTranslation::findOne(['event_id' => $model->id, 'language_id' => $languageId])){
                 $model_translation = $model_translation_data;
             }
         }
@@ -79,7 +79,7 @@ class PostController extends Controller
             $model->create($request->post(), $image);
             $model_translation->create($request->post(), $model->id);
 
-            return $this->redirect(Url::toRoute(['/articles/post/create', 'id' => $model->id, 'languageId' => $languageId]));
+            return $this->redirect(Url::toRoute(['/events/post/create', 'id' => $model->id, 'languageId' => $languageId]));
         }
 
         $rows = $model->getField($languageId);

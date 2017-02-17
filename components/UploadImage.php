@@ -27,8 +27,8 @@ class UploadImage extends Model
     {
         if ($this->validate() && !empty($this->imageFile)) {
             /**@var Imagable $imagine */
-            $imagine = \Yii::$app->article;
-            $path = $imagine->create('article', $this->imageFile);
+            $imagine = \Yii::$app->event;
+            $path = $imagine->create('event', $this->imageFile);
             return $path;
         } else {
             return false;

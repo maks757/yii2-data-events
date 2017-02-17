@@ -2,7 +2,7 @@
 /**
  * @author Maxim Cherednyk <maks757q@gmail.com, +380639960375>
  */
-use maks757\eventsdata\entities\Yii2DataArticle;
+use maks757\eventsdata\entities\Yii2DataEvent;
 use maks757\language\entities\Language;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -23,19 +23,19 @@ use yii\helpers\Url;
     </tr>
     </thead>
     <tbody>
-    <?php /** @var $articles Yii2DataArticle[] */ foreach ($articles as $article): ?>
+    <?php /** @var $events Yii2DataEvent[] */ foreach ($events as $event): ?>
         <tr style="height: 70px;">
-            <th><?= $article->id ?></th>
-            <td><?= $article->getTranslation()->name ?></td>
-            <td><?= $article->getTranslation()->description ?></td>
-            <td><img src="<?= $article->getImage() ?>" alt="" width="100"></td>
-            <td><?= date('d-m-Y', $article->date) ?></td>
+            <th><?= $event->id ?></th>
+            <td><?= $event->getTranslation()->name ?></td>
+            <td><?= $event->getTranslation()->description ?></td>
+            <td><img src="<?= $event->getImage() ?>" alt="" width="100"></td>
+            <td><?= date('d-m-Y', $event->date) ?></td>
             <td>
-                <?php $translations = ArrayHelper::index($article->translations, 'language.'.$language_field_name); ?>
+                <?php $translations = ArrayHelper::index($event->translations, 'language.'.$language_field_name); ?>
                 <?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
                     <a href="<?= Url::to([
-                        '/articles/post/create',
-                        'id' => $article->id,
+                        '/events/post/create',
+                        'id' => $event->id,
                         'languageId' => $language->id
                     ]) ?>"
                        class="btn btn-xs btn-<?= $translations[$language->$language_field_name] ? 'success' : 'danger' ?>">
@@ -44,14 +44,14 @@ use yii\helpers\Url;
                 <?php endforeach ?>
             </td>
             <td>
-                <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article->id, 'languageId' => $language_default])?>"
+                <a href="<?= \yii\helpers\Url::toRoute(['/events/post/create', 'id' => $event->id, 'languageId' => $language_default])?>"
                     class="btn btn-info btn-xs">Изменить</a>
-                <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/delete', 'id' => $article->id])?>"
+                <a href="<?= \yii\helpers\Url::toRoute(['/events/post/delete', 'id' => $event->id])?>"
                     class="btn btn-danger btn-xs">Удалить</a>
             </td>
         </tr>
     <?php endforeach; ?>
     </tbody>
 </table>
-<a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create'])?>"
+<a href="<?= \yii\helpers\Url::toRoute(['/events/post/create'])?>"
     class="btn btn-success pull-right">Добавить статью</a>

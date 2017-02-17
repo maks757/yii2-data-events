@@ -4,11 +4,11 @@
  */
 
 /**
- * @var $model \maks757\eventsdata\entities\Yii2DataArticleImage
- * @var $model_translation \maks757\eventsdata\entities\Yii2DataArticleImageTranslation
+ * @var $model \maks757\eventsdata\entities\Yii2DataEventImage
+ * @var $model_translation \maks757\eventsdata\entities\Yii2DataEventImageTranslation
  * @var $model_image \maks757\eventsdata\components\UploadImages
  * @var $language_id integer
- * @var $article_id integer
+ * @var $event_id integer
  */
 use common\modules\gallery\components\UploadForm;
 use common\modules\gallery\widgets\show_images\Gallery;
@@ -21,15 +21,15 @@ use yii\jui\DatePicker;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 ?>
-    <a href="<?= \yii\helpers\Url::toRoute(['/articles/post/create', 'id' => $article_id, 'languageId' => $language_id]) ?>"
+    <a href="<?= \yii\helpers\Url::toRoute(['/events/post/create', 'id' => $event_id, 'languageId' => $language_id]) ?>"
        class="btn btn-info">Назад к статье</a><br><br>
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
     <?php $translations = ArrayHelper::index($model->translations, 'language.lang_id'); ?>
     <?php /** @var $languages Language[] */ foreach ($languages as $language): ?>
         <a href="<?= Url::to([
-            '/articles/field/create-image',
+            '/events/field/create-image',
             'id' => $model->id,
-            'article_id' => $model->article_id,
+            'event_id' => $model->event_id,
             'languageId' => $language->id
         ]) ?>"
            class="btn btn-xs btn-<?= $translations[$language->lang_id] ? 'success' : 'danger' ?>">
